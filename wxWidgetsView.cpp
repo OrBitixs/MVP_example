@@ -1,5 +1,3 @@
-#include <vector>
-
 #include "wxWidgetsView.hpp"
 
 #define ck_ENTER 13
@@ -46,7 +44,6 @@ void MyFrame::OnEnterDown(wxKeyEvent& event)
 {
     //wxMessageBox(wxString::Format("KeyDown: %i\n", (int)event.GetKeyCode()));
     //std::cout << "Key "<< (int)event.GetKeyCode() <<" has been pressed down" << std::endl;
-
     if (event.GetKeyCode() == ck_ENTER)
     {
         if (!presenter)
@@ -54,18 +51,59 @@ void MyFrame::OnEnterDown(wxKeyEvent& event)
             std::cout << "ERROR::MyFrame::presenter is nullptr" << std::endl;
             exit(-1);
         }
+        if (event.GetEventObject() == modelName)
+        {
+            presenter->change_model_name(modelName->GetValue().ToStdString());
+        }
+        else if (event.GetEventObject() == modelVersionMajor)
+        {
+            size_t version;
+            try
+            {
+                version = std::stoi(modelVersionMajor->GetValue().ToStdString());
+                presenter->change_model_version_major(version);
+            }
+            catch (std::invalid_argument const& ex)
+            {
+                std::cout << "std::invalid_argument::what(): " << ex.what() << std::endl;
+            }
+        }
+        else if (event.GetEventObject() == modelVersionMinor)
+        {
+            size_t version;
+            try
+            {
+                version = std::stoi(modelVersionMinor->GetValue().ToStdString());
+                presenter->change_model_version_minor(version);
+            }
+            catch (std::invalid_argument const& ex)
+            {
+                std::cout << "std::invalid_argument::what(): " << ex.what() << std::endl;
+            }
+        }
 
-        presenter->change_model_name(modelName->GetValue().ToStdString());
     }
     event.Skip();
 }
+
+void MyFrame::OnRefreshButton(wxCommandEvent& event)
+{
+    presenter->show_model_details();
+}
+
+void MyFrame::ResfreshModelInfo(const std::string modelName, const size_t modelVersionMajor, const size_t modelVersionMinor)
+{
+    std::string concatenated = modelName + std::to_string(modelVersionMajor) + "." + std::to_string(modelVersionMinor);
+    modelInformation->ChangeValue(concatenated);
+}
+
 
 void MyFrame::SetupForm()
 {
     wxPanel* panel = new wxPanel(this);
 
     wxStaticText* nameLabel = new wxStaticText(panel, wxID_ANY, "Model name:");
-    modelName = new wxTextCtrl(panel, wxID_ANY, "", wxDefaultPosition, wxSize(FromDIP(300), wxDefaultSize.GetHeight()));
+    modelName = new wxTextCtrl(panel, wxID_ANY, "", wxDefaultPosition, wxSize(FromDIP(400), wxDefaultSize.GetHeight()));
 
     wxStaticText* versionMajorLabel = new wxStaticText(panel, wxID_ANY, "Version major:");
     modelVersionMajor = new wxTextCtrl(panel, wxID_ANY);
@@ -84,6 +122,10 @@ void MyFrame::SetupForm()
     sizer->Add(modelVersionMajor, 0, wxEXPAND | wxALL, FromDIP(3));
     sizer->Add(versionMinorLabel, 0, wxEXPAND | wxALL, FromDIP(3));
     sizer->Add(modelVersionMinor, 0, wxEXPAND | wxALL, FromDIP(3));
+
+    refreshButton = new wxButton(panel, ID_REFRESH_BUTTON, wxT("Refresh"), wxDefaultPosition, wxDefaultSize, 0);
+    sizer->Add(refreshButton, 0, wxEXPAND | wxALL, FromDIP(3));
+
     sizer->Add(modelInformation, 0, wxEXPAND | wxALL, FromDIP(3));
 
     panel->SetSizer(sizer);
@@ -93,6 +135,9 @@ void MyFrame::SetupForm()
     this->SetSizer(overallSizer);
 
     modelName->Bind(wxEVT_CHAR_HOOK, &MyFrame::OnEnterDown, this);
+    modelVersionMajor->Bind(wxEVT_CHAR_HOOK, &MyFrame::OnEnterDown, this);
+    modelVersionMinor->Bind(wxEVT_CHAR_HOOK, &MyFrame::OnEnterDown, this);
+    refreshButton->Bind(wxEVT_BUTTON, &MyFrame::OnRefreshButton, this);
 
 }
 

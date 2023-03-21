@@ -17,6 +17,7 @@ public:
 	void link_view(View* view);	
 	void link_myFrame(MyFrame* myFrame);
 	void print_model_details() const;
+	void show_model_details() const;
 	void change_model_name(const std::string new_name);
 	void change_model_version_major(const size_t model_version_major);
 	void change_model_version_minor(const size_t model_version_minor);

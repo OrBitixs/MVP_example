@@ -82,6 +82,11 @@ void Presenter::print_model_details() const
 	}
 }
 
+void Presenter::show_model_details() const
+{
+	myFrame->ResfreshModelInfo(model->get_model_name(), model->get_model_version_major(), model->get_model_version_minor());
+}
+
 void Presenter::change_model_name(const std::string model_name)
 {
 	if (!model)
@@ -103,6 +108,7 @@ void Presenter::change_model_version_major(const size_t model_version_major)
 	}
 	else
 	{
+		std::cout << "new model version major:\t" << model_version_major<< std::endl;
 		model->set_model_version_major(model_version_major);
 	}
 }
@@ -115,22 +121,10 @@ void Presenter::change_model_version_minor(const size_t model_version_minor)
 	}
 	else
 	{
+		std::cout << "new model version minor:\t" << model_version_minor << std::endl;
 		model->set_model_version_minor(model_version_minor);
 	}
 
 }
 
-//void Presenter::change_model_details(const std::string model_name, const size_t model_version_major, const size_t model_version_minor) const
-//{
-//	if (!model)
-//	{
-//		std::cout << "ERROR::Presenter::model is nullptr";
-//	}
-//	else
-//	{
-//		model->set_model_name(model_name);
-//		model->set_model_version_major(model_version_major);
-//		model->set_model_version_minor(model_version_minor);
-//	}
-//}
 
