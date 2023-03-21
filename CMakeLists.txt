@@ -13,5 +13,5 @@ set(wxWidgets_LIB_DIR C:/maks/libs/wxWidgets-3.2.2.1/binaries/lib/vc14x_x64_dll)
 find_package(wxWidgets REQUIRED COMPONENTS net core base)
 include(${wxWidgets_USE_FILE})
 
-add_executable (lab2 "lab2.cpp" "lab2.h" "model.hpp" "model.cpp" "presenter.cpp" "presenter.hpp" "view.cpp" "view.hpp" "model.fwd.hpp" "view.fwd.hpp" "presenter.fwd.hpp" "wxWidgetsView.cpp")
+add_executable (lab2 "lab2.cpp" "lab2.h" "model.hpp" "model.cpp" "presenter.cpp" "presenter.hpp" "view.cpp" "view.hpp" "model.fwd.hpp" "view.fwd.hpp" "presenter.fwd.hpp" "wxWidgetsView.cpp" "wxWidgetsView.fwd.hpp")
 target_link_libraries(lab2 ${wxWidgets_LIBRARIES})

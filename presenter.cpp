@@ -3,6 +3,7 @@
 #include "presenter.hpp"
 #include "view.hpp"
 #include "model.hpp"
+#include "wxWidgetsView.hpp"
 
 #define EXIT "exit"
 #define DISPLAY "display"
@@ -21,7 +22,7 @@ void Presenter::loop()
 	{
 		while (true)
 		{
-			std::cout << "enter command\npossible commands: [" << EXIT << "|" << DISPLAY << "|" << EDIT_NAME << "|" << EDIT_VERSION_MAJOR << "|" << EDIT_VERSION_MINOR << std::endl;
+			std::cout << "enter command\npossible commands: [" << EXIT << "|" << DISPLAY << "|" << EDIT_NAME << "|" << EDIT_VERSION_MAJOR << "|" << EDIT_VERSION_MINOR <<"]" << std::endl;
 			const std::string command = view->get_command();
 
 			if (command == EXIT)
@@ -63,6 +64,12 @@ void Presenter::link_view(View* view)
 	this->view = view;
 }
 
+void Presenter::link_myFrame(MyFrame* myFrame)
+{
+	this->myFrame = myFrame;
+}
+
+
 void Presenter::print_model_details() const
 {
 	if (!view)
@@ -79,10 +86,11 @@ void Presenter::change_model_name(const std::string model_name)
 {
 	if (!model)
 	{
-		std::cout << "ERROR::Presenter::model is nullptr";
+		std::cout << "ERROR::Presenter::model is nullptr" << std::endl;
 	}
 	else
 	{
+		std::cout << "new model name:\t" << model_name << std::endl;
 		model->set_model_name(model_name);
 	}
 }

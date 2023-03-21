@@ -26,16 +26,19 @@ wxIMPLEMENT_APP_CONSOLE(MyApp);
 bool MyApp::OnInit()
 {
 
-	Model model("model1", 1, 10);
-	Presenter presenter;
-	View view;
+	Model* model = new Model("model1", 1, 10);
+	Presenter* presenter = new Presenter();
+	View* view = new View();
 	
 	
-	presenter.link_model(&model);
-	presenter.link_view(&view);
+	presenter->link_model(model);
+	presenter->link_view(view);
 
 
 	MyFrame* frame = new MyFrame();
+
+	presenter->link_myFrame(frame);
+	frame->LinkPresenter(presenter);
 
 	bool GUI = false;
 	if (wxApp::argc > 1)
@@ -46,15 +49,14 @@ bool MyApp::OnInit()
 		}
 	}
 
-	std::cout << "shit" << std::endl;
-
 	if (GUI)
 	{
 		frame->Show(true);
+		SetTopWindow(frame);
 	}
 	else
 	{
-		presenter.loop();
+		presenter->loop();
 	}
 
 	return true;
